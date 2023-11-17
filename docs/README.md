@@ -61,7 +61,9 @@ cleaned_data = df.assign(
 
 At this point, we also wanted filter our data in order to have a dataframe that only consisted of complete data ('datacompleteness' == True) and data that only consisted of the top lane position ('position' == 'top'). This would allow us easy access to be able to go through this data in the future. 
 
-<img title = "DataFrame Head" src = "assets/dataframe_head.png">
+<div style = "text-align:center">
+  <img title = "DataFrame Head" src = "assets/dataframe_head.png">
+</div>
 
 ### Univariate Analysis
 
@@ -83,7 +85,9 @@ For data that could be qualified as NMAR, the data has to be essentially missing
 
 For this dataset, we looked through a lot of the columns that had missing data, and observed that columns like 'dragons' and 'opp_dragons', and their types of dragons ('infernals', 'mountains', 'clouds', 'oceans', and 'chemtechs') were missing very often. We theorize that these columns are NMAR, because if the entry in these columns are NaN, this likely means that there were no dragons or no specific dragon killed/found in that game, meaning the data was likely just not inputed instead of having '0' in the entry. For these, some additional data that could technically explain missingness could potentially be the number of dragons present in the game (which also has a lot of NaN values), because just intuitively, the more dragons there are in a game, the higher the likelihood that there is a larger variety of dragons.
 
-<img title = "Missing Dragons" src = "assets/missing_data.png">
+<div style = "text-align:center">
+  <img title = "Missing Dragons" src = "assets/missing_data.png">
+</div>
 
 ### Missingness Dependency
 
@@ -99,11 +103,17 @@ missing_data = missing_important_data.loc[:, ['league', 'split', 'playoffs', 'pa
 missing_data
 ```
 
-<img title = "null distribution" src = "assets/null_distribution.png">
+<div style = "text-align:center">
+  <img title = "null distribution" src = "assets/null_distribution.png">
+</div>
 
 Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
 
-<iframe src = "assets/league_missingness_distribution.html" width = 800 height = 600 frameBorder = 0></iframe>
+<div style = "text-align:center">
+  <iframe src = "assets/league_missingness_distribution.html" width = 800 height = 600 frameBorder = 0></iframe>
+</div>
+
+When looking at this graph, it looks like missingness is extreme in leagues like the 'LPL' and 'LDL', like we observed earlier when analyzing the dataset. In fact, with 'LDL' carrying a Missingness Proportion of 0.517867, meaning for all missing values in 'opp_csat15', the 'LDL' is the league
 
 ## Hypothesis Testing
 
