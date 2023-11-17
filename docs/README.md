@@ -13,8 +13,12 @@ As we navigate through the statistics, trends, and standout performances, our ai
 - [Introduction](#introduction)
 - [Cleaning and EDA](#cleaning-and-EDA)
   - [Cleaning](#cleaning)
-  - [EDA (exploratory data analysis)](#exploratory-data-analysis)
+  - [Univariate Analysis](#univariate-analysis)
+  - [Bivariate Analysis](#bivariate-analysis)
+  - [Interesting Aggregates](#interesting-aggregates)
 - [Assessment of Missingness](#assessment-of-missingness)
+  - [NMAR Analysis](#nmar-analysis)
+  - [Missingness Dependency](#missingness-dependency)  
 - [Hypothesis Testing](#hypothesis-testing)
 - [Author](#author)
 
@@ -45,14 +49,48 @@ At this point, we also wanted filter our data in order to have a dataframe that 
 
 <img title = "DataFrame Head" src = "assets/dataframe_head.png">
 
-### Exploratory Data Analysis
+### Univariate Analysis
+
+...
+
+### Bivariate Analysis
+
+...
+
+### Interesting Aggregates 
 
 ...
 
 ## Assessment of Missingness
 
-...
+### NMAR Analysis
 
+For data that could be qualified as NMAR, the data has to be essentially missing on itself. The reason why it's missing is likely to do with it's own value.
+
+For this dataset, we looked through a lot of the columns that had missing data, and observed that columns like 'dragons' and 'opp_dragons', and their types of dragons ('infernals', 'mountains', 'clouds', 'oceans', and 'chemtechs') were missing very often. We theorize that these columns are NMAR, because if the entry in these columns are NaN, this likely means that there were no dragons or no specific dragon killed/found in that game, meaning the data was likely just not inputed instead of having '0' in the entry. For these, some additional data that could technically explain missingness could potentially be the number of dragons present in the game (which also has a lot of NaN values), because just intuitively, the more dragons there are in a game, the higher the likelihood that there is a larger variety of dragons.
+
+<img title = "Missing Dragons" src = "assets/missing_data
+.png">
+
+### Missingness Dependency
+
+For missingness, we wanted to analyze why some data was marked complete while others were marked partial. In our observations, we noticed that a lot of the data from the 'LPL' league, which is from China, was partially missing, especially the columns at the end of the DataFrame, which we needed. We wanted to see if this was actually a pattern, because from the mini-observations we had from looking through the data, it looked like most of the missing/incomplete data was from Chinese leagues, like the 'LPL' and the 'LDL'.
+
+Therefore, we tested our original DataFrame, df, and assessed which columns were missing data regularly. Specifically, we noticed that one of our most important columns, 'opp_csat15', was missing very often and also at the same amounts as other columns near the end of the DataFrame.
+
+In order to test these out, we singled out variables that we thought would have a correlation to whether or not 'opp_csat15' was missing. First, we wanted to decide our test statistic from our normal data. In doing this, we took all of our rows where 'opp_csat15' was NaN, and filtered out to get the columns of ['league', 'split', 'playoffs', 'patch', and 'position']. 
+
+'''
+missing_important_data = df[df['opp_csat15'].isnull()]
+missing_data = missing_important_data.loc[:, ['league', 'split', 'playoffs', 'patch', 'position']]
+missing_data
+'''
+
+<img title = 'null distribution', src = 'assets/null_distribution.png'>
+
+Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
+
+<iframe src = "assets/league_missingness_distribution.html", widrth = 800, height = 600, frameBorder = 0></iframe>
 ## Hypothesis Testing
 
 ...
