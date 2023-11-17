@@ -43,7 +43,21 @@ One of the most important (and time consuming) processes that data scientists go
 
 First, we had to get the data from somewhere. Fortunately, Oracle has data of all the competitive matches that occur each year, so all we had to do was download the csv files that allowed us to get the data. 
 
+```
+df = pd.read_csv("2022_LoL_esports_match_data_from_OraclesElixir.csv")
+```
+
 Then, we created a dataframe that allowed us to filter for the data that was needed for the analysis. After getting our data, we converted a lot of non-boolean values into boolean values like True and False to help our filtering in the future easier. For example, the columns 'datacompleteness', 'playoffs', and 'result' all were converted into 'True' and 'False' in order to make our data make more sense. Additionally, in this section, we also were able to locate the columns that were needed, which were ['gameid', 'datacompleteness', 'playoffs', 'side', 'position', 'champion', 'gamelength', 'result', 'killsat15', 'assistsat15', 'deathsat15', 'goldat15', 'xpat15', 'csat15', 'golddiffat15', 'xpdiffat15', 'csdiffat15'].
+
+```
+cleaned_data = df.assign(
+    datacompleteness = df['datacompleteness'].apply(lambda x: True if x == "complete" else False),
+    playoffs = df['playoffs'].apply(lambda x: True if x == 1 else False),
+    result = df['result'].apply(lambda x: True if x == 1 else False)
+    ).loc[
+        :, ['gameid', 'datacompleteness', 'playoffs', 'side', 'position', 'champion', 'gamelength', 'result', 'killsat15', 'assistsat15', 'deathsat15', 'goldat15', 'xpat15', 'csat15', 'golddiffat15', 'xpdiffat15', 'csdiffat15']
+    ]
+```
 
 At this point, we also wanted filter our data in order to have a dataframe that only consisted of complete data ('datacompleteness' == True) and data that only consisted of the top lane position ('position' == 'top'). This would allow us easy access to be able to go through this data in the future. 
 
@@ -69,8 +83,7 @@ For data that could be qualified as NMAR, the data has to be essentially missing
 
 For this dataset, we looked through a lot of the columns that had missing data, and observed that columns like 'dragons' and 'opp_dragons', and their types of dragons ('infernals', 'mountains', 'clouds', 'oceans', and 'chemtechs') were missing very often. We theorize that these columns are NMAR, because if the entry in these columns are NaN, this likely means that there were no dragons or no specific dragon killed/found in that game, meaning the data was likely just not inputed instead of having '0' in the entry. For these, some additional data that could technically explain missingness could potentially be the number of dragons present in the game (which also has a lot of NaN values), because just intuitively, the more dragons there are in a game, the higher the likelihood that there is a larger variety of dragons.
 
-<img title = "Missing Dragons" src = "assets/missing_data
-.png">
+<img title = "Missing Dragons" src = "assets/missing_data.png">
 
 ### Missingness Dependency
 
@@ -90,7 +103,7 @@ missing_data
 
 Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
 
-<iframe src = "assets/league_missingness_distribution.html" widrth = 800 height = 600 frameBorder = 0></iframe>
+<iframe src = "assets/league_missingness_distribution.html" width = 800 height = 600 frameBorder = 0></iframe>
 
 ## Hypothesis Testing
 
