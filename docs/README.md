@@ -107,13 +107,52 @@ missing_data
   <img title = "null distribution" src = "assets/null_distribution.png">
 </div>
 
-Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
+By using the groupby() method, we were able to test out our columns and see the missingness of certain leagues. Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
 
 <div style = "text-align:center">
   <iframe src = "assets/league_missingness_distribution.html" width = 800 height = 600 frameBorder = 0></iframe>
 </div>
 
-When looking at this graph, it looks like missingness is extreme in leagues like the 'LPL' and 'LDL', like we observed earlier when analyzing the dataset. In fact, with 'LDL' carrying a Missingness Proportion of 0.517867, meaning for all missing values in 'opp_csat15', the 'LDL' is the league
+When looking at this graph, it looks like missingness is extreme in leagues like the 'LPL' and 'LDL', like we observed earlier when analyzing the dataset. In fact, with 'LDL' carrying a Missingness Proportion of 0.517867, meaning for all missing values in 'opp_csat15', the 'LDL' is the league over 50% of the time.
+
+Although this can be explained by the 'LDL' having over 50% of all competitive games, we want to test the dataset in full my permuting the columns that we tested in order to see if it's possible to have a league have a value as high as 0.517867
+
+```
+test_df = (df
+           .assign(league = np.random.permutation(df['league']))
+           .assign(split = np.random.permutation(df['split']))
+           .assign(playoffs = np.random.permutation(df['playoffs']))
+           .assign(patch = np.random.permutation(df['patch']))
+           .assign(position = np.random.permutation(df['position']))
+           )
+test_df = test_df[test_df['opp_csat15'].isnull()].loc[:, ['league', 'split', 'playoffs', 'patch', 'position']]
+```
+
+Then, by grouping 'league' again, we randomized all of the leagues and looked at the null values once again, to see if any league could top over 50% rate of missingness. 
+
+<div style = "text-align:center">
+  <iframe src = "assets/permutated_league_missingness.html" width = 800 height = 600 frameBorder = 0></iframe>
+</div>
+
+As you can see, even our league with the largest share of missing values when permutated cannot even hit 0.1 of the total missingness on column 'opp_csat15'. This implies that the missingness of this column is likely Missing at Random, dependent on the 'league' column. To test this, let's use a pair of hypotheses and a significance level of 0.01 with 1000 trial runs.
+
+
+<bold>Null Hypothesis: Data that is missing comes from the same 'league' distribution as all other data
+Alternative Hypothesis: Data that is missing is significantly more likely to be one 'league' than others</bold>
+
+```
+differences = []
+for _ in range(1000):
+    test_df = df.assign(league = np.random.permutation(df['league']))
+    stats = test_df[test_df['opp_csat15'].isnull()].groupby('league')['playoffs'].count()
+    differences.append(stats[stats.index == 'LDL'].iloc[0]/stats.sum())
+    
+p_value = np.mean(np.array(differences) >= 0.517867)
+```
+
+Here, our p-value return 0.0, meaning that we can reject our null hypothesis, meaning that it is likely that data missing from 'opp_csat15' is significantly more likely to be in at least one 'league' than others - this in turn means that 'opp_csat15' has data that is Missing At Random. 
+
+
 
 ## Hypothesis Testing
 
