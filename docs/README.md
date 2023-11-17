@@ -43,7 +43,7 @@ Then, we created a dataframe that allowed us to filter for the data that was nee
 
 At this point, we also wanted filter our data in order to have a dataframe that only consisted of complete data ('datacompleteness' == True) and data that only consisted of the top lane position ('position' == 'top'). This would allow us easy access to be able to go through this data in the future. 
 
-<img title = "DataFrame Head" src = "../assets/dataframe_head.png">
+<img title = "DataFrame Head" src = "assets/dataframe_head.png">
 
 ### Exploratory Data Analysis
 
