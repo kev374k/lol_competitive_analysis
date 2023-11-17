@@ -80,17 +80,18 @@ Therefore, we tested our original DataFrame, df, and assessed which columns were
 
 In order to test these out, we singled out variables that we thought would have a correlation to whether or not 'opp_csat15' was missing. First, we wanted to decide our test statistic from our normal data. In doing this, we took all of our rows where 'opp_csat15' was NaN, and filtered out to get the columns of ['league', 'split', 'playoffs', 'patch', and 'position']. 
 
-'''
+```
 missing_important_data = df[df['opp_csat15'].isnull()]
 missing_data = missing_important_data.loc[:, ['league', 'split', 'playoffs', 'patch', 'position']]
 missing_data
-'''
+```
 
-<img title = 'null distribution', src = 'assets/null_distribution.png'>
+<img title = "null distribution" src = "assets/null_distribution.png">
 
 Jumping to our test statistic, we noticed that the Missingness Distribution of 'league' compared to the others that we tested seemed a lot more lopsided. 
 
-<iframe src = "assets/league_missingness_distribution.html", widrth = 800, height = 600, frameBorder = 0></iframe>
+<iframe src = "assets/league_missingness_distribution.html" widrth = 800 height = 600 frameBorder = 0></iframe>
+
 ## Hypothesis Testing
 
 ...
