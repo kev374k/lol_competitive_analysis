@@ -85,6 +85,9 @@ For data that could be qualified as NMAR, the data has to be essentially missing
 
 For this dataset, we looked through a lot of the columns that had missing data, and observed that columns like 'dragons' and 'opp_dragons', and their types of dragons ('infernals', 'mountains', 'clouds', 'oceans', and 'chemtechs') were missing very often. We theorize that these columns are NMAR, because if the entry in these columns are NaN, this likely means that there were no dragons or no specific dragon killed/found in that game, meaning the data was likely just not inputed instead of having '0' in the entry. For these, some additional data that could technically explain missingness could potentially be the number of dragons present in the game (which also has a lot of NaN values), because just intuitively, the more dragons there are in a game, the higher the likelihood that there is a larger variety of dragons.
 
+```
+missing_data = pd.DataFrame(df.isnull.sum()).T
+```
 <div style = "text-align:center">
   <img title = "Missing Dragons" src = "assets/missing_data.png">
 </div>
