@@ -137,8 +137,10 @@ Then, by grouping 'league' again, we randomized all of the leagues and looked at
 As you can see, even our league with the largest share of missing values when permutated cannot even hit 0.1 of the total missingness on column 'opp_csat15'. This implies that the missingness of this column is likely Missing at Random, dependent on the 'league' column. To test this, let's use a pair of hypotheses and a significance level of 0.01 with 1000 trial runs.
 
 
-<bold>Null Hypothesis: Data that is missing comes from the same 'league' distribution as all other data
-Alternative Hypothesis: Data that is missing is significantly more likely to be one 'league' than others</bold>
+<strong>
+Null Hypothesis:</strong> Data that is missing comes from the same 'league' distribution as all other data
+
+<strong>Alternative Hypothesis:</strong> Data that is missing is significantly more likely to be one 'league' than others
 
 ```
 differences = []
@@ -152,7 +154,37 @@ p_value = np.mean(np.array(differences) >= 0.517867)
 
 Here, our p-value return 0.0, meaning that we can reject our null hypothesis, meaning that it is likely that data missing from 'opp_csat15' is significantly more likely to be in at least one 'league' than others - this in turn means that 'opp_csat15' has data that is Missing At Random. 
 
+Now, let's find a column that 'opp_csat15' does not depend on. Intuitively, 'opp_csat15' shouldn't depend on columns that are aggregated throughout our data extremely evenly; that is, columns that have no relation and are evenly spread out should not have any correlation with 'opp_csat15'. One of these columns is 'position', which will always be even regardless of the matches, since all games will have 2 of each position.
 
+Here, let's test what the position missingness of 'opp_csat15' looks like when we groupby() on the 'position' column.
+
+<div style = "text-align:center">
+  <iframe src = "assets/position_missingness.html" width = 800 height = 600 frameBorder = 0></iframe>
+</div>
+
+Here, we can see missingness is split dead even between all of the positions, which we expeceted. This gives us a test statistic of (1/6). Now, in order to test if 'opp_csat15' is dependent on 'position', we want to do another permutation test to test our hypothesis that the missingness of 'opp_csat15' comes from same distribution as the whole of 'opp_csat15', tested at the 0.01 significance level
+
+<strong>Null Hypothesis:</strong> The missingness of NA values in the 'opp_csat15' column comes from the same distribution regardless of the position player's have played
+
+<strong>Alternative Hypothesis:</strong> The missingness of NA values in 'opp_csat15' column is dependent on a position played
+
+```
+position_differences = []
+for _ in range(1000):
+    test_df = df.assign(position = np.random.permutation(df['position']))
+    stats = test_df[test_df['opp_csat15'].isnull()].groupby('position')['gameid'].count()
+    position_differences.append(stats.iloc[0]/stats.sum())
+
+position_pval = np.mean(np.array(position_differences) >= (1/6))
+```
+
+Here, our position_pval equates to around ~0.5, meaning that in this case, we fail to reject the null hypothesis, meaning there is no sufficient evidence that the 'position' column plays an effect on the missingness of 'opp_csat15'. For an even more thorough example, here is a permutated version of our earlier graph, to test how often a position went over 1/6.
+
+<div style = "text-align:center">
+  <iframe src = "assets/permutated_position_missingness.html" width = 800 height = 600 frameBorder = 0></iframe>
+</div>
+
+As you can see, this happened very often, because at the end of the day, the missingness of 'opp_csat15' never relied on 'position'.
 
 ## Hypothesis Testing
 
