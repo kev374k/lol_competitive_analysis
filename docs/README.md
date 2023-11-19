@@ -1,12 +1,29 @@
 # A League of Legends Competitive Analysis
 
-In the ever-evolving landscape of esports, one game stands out as a titan among its peers—League of Legends. As we stride into the heart of 2022, the competitive scene of this multiplayer online battle arena (MOBA) continues to captivate audiences with its strategic depth, intense team dynamics, and the relentless pursuit of victory on the Summoner's Rift.
+In the ever-evolving landscape of esports, one game stands out as a titan among
+its peers—League of Legends. As we stride into the heart of 2023, the 
+competitive scene of this multiplayer online battle arena (MOBA) continues to 
+captivate audiences with its strategic depth, intense team dynamics, and it's
+players' relentless pursuit of glory on the Summoner's Rift.
 
-The year 2022 has witnessed a symphony of skill, innovation, and calculated risk-taking as professional teams from around the world converge to compete in the League of Legends global ecosystem. From the intense battles in regional leagues to the grandeur of international tournaments, each match serves as a canvas where players paint their narratives, leaving an indelible mark on the competitive landscape.
+The year 2022 has witnessed a symphony of skill, innovation, and calculated 
+risk-taking as professional teams from around the world converge to compete in 
+the League of Legends global ecosystem. From the intense battles in regional 
+leagues to the grandeur of international tournaments, each match serves as a 
+canvas where players paint their narratives, leaving an indelible mark on the 
+competitive landscape.
 
-This analysis delves into the multifaceted dimensions of League of Legends esports in 2022. From champion picks and bans to macro and micro plays, we embark on a journey to dissect the strategies, meta shifts, and standout moments that have defined the competitive metagame this year. Join us as we unravel the narrative of League of Legends competitive matches in 2022.
+This analysis delves into the multifaceted dimensions of League of Legends 
+esports in 2022. From champion picks and bans to macro and micro plays, we 
+embark on a journey to dissect the strategies, meta shifts, and standout 
+moments that have defined the competitive metagame this year. Join us as we 
+unravel the narrative of League of Legends competitive matches in 2022.
 
-As we navigate through the statistics, trends, and standout performances, our aim is to provide a comprehensive exploration of the evolving dynamics within the League of Legends esports sphere. Buckle up as we delve into the heart of the action, unraveling the tales of triumphs, setbacks, and the ever-shifting sands of competitive play in the world of League of Legends in 2022.
+As we navigate through the statistics, trends, and standout performances, 
+our aim is to provide a comprehensive exploration of the evolving dynamics 
+within the League of Legends esports sphere. Buckle up as we delve into the 
+heart of the action, unraveling the tales of triumphs, setbacks, and the 
+ever-shifting sands of competitive play in the world of League of Legends in 2022.
 
 ## Contents
 
@@ -25,23 +42,63 @@ As we navigate through the statistics, trends, and standout performances, our ai
 
 ## Introduction
 
-In this analysis, we wanted to analyze the best of the best: Competitive Games, and we decided to use a recent year, 2022, to show this. In our analysis, we will analyze one specific question that we believe is very important to how winning games, the primary objective of League, is decided:
+In this analysis, we wanted to analyze the best of the best: Competitive Games,
+and we decided to use the most recent completed season, the 2022 season, to 
+show this. In our analysis, we will analyze one specific question that we 
+believe is very important to how winning games, the primary objective of 
+League, is decided:
 
-<strong>Does a winning top lane affect the probability of a team winning the game?</strong>
+<strong>Does a winning top lane affect the probability of a 
+team winning the game?</strong>
 
-Top lane, one of the five positions in League of Legends, is typically observed as a solo lane, meaning they often don't receive too much help from other players and especially the jungle, which typically (at least recently) prioritizes objectives like Dragons, Heralds, and Barons instead of ganking near top. 
+Top lane, one of the five positions in League of Legends, is typically observed
+as a solo lane, meaning they often don't receive too much help from other 
+players on their team and especially the jungle, which typically (at least 
+recently)prioritizes objectives like Dragons, Heralds, and Barons instead of 
+helping near top. 
 
-Therefore, we wanted to ask this question, because it is especially relevant—we observed (with out eyes) that top lanes often didn't really help a team unless they were doing exceptionally well and could carry the team, meaning they observed a very large gold lead. Therefore, we wanted to see how often they actually made teams better, and if they did, was it significant to winning in pro-play. In doing so, we looked through 149400 rows (or 12450 games) worth of data. In filtering our data, we realized that of the 123 columns that were provided, we only needed these 17: ['gameid', 'datacompleteness', 'playoffs', 'side', 'position', 'champion', 'gamelength', 'result', 'killsat15', 'assistsat15', 'deathsat15', 'goldat15', 'xpat15', 'csat15', 'golddiffat15', 'xpdiffat15', 'csdiffat15'].
+Therefore, we wanted to ask this question, because it is especially relevant—we
+observed (with out eyes) that top lanes often didn't really help a team unless 
+they were doing exceptionally well and could carry the team, meaning they 
+observed a very large gold lead. Therefore, we wanted to see how often they 
+actually made teams better, and if they did, was it significant to winning in 
+pro-play. In doing so, we looked through 149400 rows (or 12450 games) worth of 
+data. In filtering our data, we realized that of the 123 columns that were 
+provided, we only needed these 17 to help us answer our question:```['gameid', 'datacompleteness', 
+'side', 'position', 'result', 'killsat15', 'assistsat15', 'deathsat15', 
+'goldat15', 'xpat15', 'csat15', 'golddiffat15', 'xpdiffat15', 'csdiffat15']```.
 
-For these columns, 'gameid' allowed us to groupby stats of each game, 'datacompleteness' allowed us to verify if the data was complete (and therefore usable), 'position' and 'champion' allowed us to experiment with each position and how well they were played, and the rest of the columns were used in order to help us create a test statistic to test whether or not a top-lane was winning in each particular game.
+For these columns, 'gameid' allowed us to differentiate different games, 
+'datacompleteness' allowed us to verify if the data was complete (and therefore
+usable), 'position' and 'champion' allowed us to get the position we wanted (top)
+and what champion they played. The rest of the columns were used in order 
+to help us create a test statistic to test whether a top-lane was 
+winning in each particular game.
+
+Description of columns:
+- ```'gameid'```: the unique identifiers for the games that occurred. Used to
+differentiate each game.
+- ```'data'```: indicator of whether the data for this row is complete or 
+missing certain information. Used to check if the row may be missing data in
+other relevant columns.
+- ```'side'```: differentiates the players in the game as ```'blue'``` or 
+```'red'``` based on the side they were playing as.
+- ```'position'```: describes which position the player played as.
+- ```'result```: describes whether the team of the player won in the end or 
+not. ```True``` when the team won, ```False``` when the team lost.
+- 
 
 ## Cleaning and EDA
 
-One of the most important (and time consuming) processes that data scientists go through is cleaning the data. Here, we explore the cleaning process as well as the Exploratory Data Analysis that led us to getting our results
+One of the most important (and time-consuming) processes that data scientists 
+go through is cleaning the data. Here, we explore the cleaning process as well 
+as the Exploratory Data Analysis that led us to getting our results
 
 ### Cleaning
 
-First, we had to get the data from somewhere. Fortunately, Oracle has data of all the competitive matches that occur each year, so all we had to do was download the csv files that allowed us to get the data. 
+First, we had to get the data from somewhere. Fortunately, Oracle has data of 
+all the competitive matches that occur each year, so all we had to do was 
+download the csv files that allowed us to get the data. 
 
 ```
 df = pd.read_csv("2022_LoL_esports_match_data_from_OraclesElixir.csv")
