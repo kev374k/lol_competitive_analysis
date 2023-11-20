@@ -37,7 +37,7 @@ ever-shifting sands of competitive play in the world of League of Legends in 202
   - [NMAR Analysis](#nmar-analysis)
   - [Missingness Dependency](#missingness-dependency)  
 - [Hypothesis Testing](#hypothesis-testing)
-- [Author](#author)
+- [Authors](#authors)
 
 
 ## Introduction
@@ -320,9 +320,7 @@ Our research question since the start of this project has been:
 
 For our hypothesis test, we wanted to continue answering this question while incorporating what we learned and observed from the previous components. Specifically, we want to find out whether ```'xpat15'```is actually a good metric to measure the performance of top laners? As such, our pair of hypotheses are:
 
-<strong> Null : Having a winning top lane, determined as the player with higher xp, does not significantly affect the probability of the team winning overall.
-    
-</strong>
+<strong> Null : Having a winning top lane, determined as the player with higher xp, does not significantly affect the probability of the team winning overall.</strong>
 
 <strong> Alt  : Having a winning top lane, determined as the player with higher xp, significantly increases the probability of the team winning overall.
 </strong>
