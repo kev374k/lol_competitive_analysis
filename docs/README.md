@@ -172,7 +172,7 @@ Below is our bar chart comparing the difference of means for player's xp between
 winning teams and losing teams as well as some relevant stats:
 
 <div style = "text-align:center">
-  <iframe src="assets/bivariate_xpat15_bar.html" width=800 height=600 frameBorder=0></iframe>
+  <iframe src="assets/bivariante_xpat15_bar.html" width=800 height=600 frameBorder=0></iframe>
 </div>
 
 Stats for the 'xpat15' column:
